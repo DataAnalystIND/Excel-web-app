@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Processor</title>
+</head>
+<body>
+    <h2>Upload an Excel File</h2>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload & Process</button>
+
+    <script>
+        async function uploadFile() {
+            let fileInput = document.getElementById("fileInput");
+            let formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+                let response = await fetch("http://127.0.0.1:8000/upload-excel/", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error("File processing failed");
+                }
+
+                // Handle Excel File Response
+                let blob = await response.blob();
+                let downloadUrl = window.URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = "updated_excel.xlsx";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                alert("File processed and downloaded successfully!");
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error processing file.");
+            }
+        }
+    </script>
+</body>
+</html>
