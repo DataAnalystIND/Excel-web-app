@@ -17,7 +17,7 @@
             formData.append("file", fileInput.files[0]);
 
             try {
-                let response = await fetch("http://127.0.0.1:8000/upload-excel/", {
+                let response = await fetch("https://excel-web-app-53.onrender.com/upload-excel/", { 
                     method: "POST",
                     body: formData
                 });
